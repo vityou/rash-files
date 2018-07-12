@@ -1,10 +1,11 @@
 #lang rash
 
-(require linea/defaults linea/line-macro)
 (require (for-syntax racket/base
 		     syntax/parse))
 
-(provide (all-defined-out))
+(provide (except-out (all-defined-out)
+                     quit)
+         (rename-out [quit exit]))
 
 
 ; stands for "simple line macro"
@@ -40,3 +41,5 @@
 slm ~ = cd
 slm .. = cd ..
 slm ../.. = cd ../..
+
+slm quit = (exit)
