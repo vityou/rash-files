@@ -8,9 +8,6 @@
 (reprovide (for-syntax racket/base syntax/parse))
 
 
-(reprovide "aliases.rkt" )
-(reprovide           "line-macros.rkt")
-;(reprovide (except-in "aliases.rkt" #%linea-default-line-macro))
-;(reprovide (except-in "line-macros.rkt" #%linea-default-line-macro))
-
+(reprovide "aliases.rkt" 
+           "line-macros.rkt")
 
