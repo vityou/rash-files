@@ -1,8 +1,9 @@
 #lang rash
 
-(require (for-syntax racket/base syntax/parse))
+(require (for-syntax racket/base syntax/parse)
+         (only-in racket/string string-contains?))
 
-(provide (all-defined-out))
+(provide (except-out (all-defined-out) best-ls-command))
 
 
 ; allows defining aliases in the form:
@@ -15,17 +16,23 @@
     [(_ name:id (~optional (~datum =)) value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
 
 
-(define best-ls-command
-  (if (string=? (substring (getenv "TERM") 0 5) "xterm")
+; determine the user's best ls command variant
+; depending on the ones available
+; and the TERM environment variable
+(define (best-ls-command)
+  (define term-var (getenv "TERM"))
+  (define long-enough (and term-var (>= (string-length term-var) 5)))
+  (if (and long-enough
+           (string-contains? term-var "xterm"))
       (cond
         [(find-executable-path "ls_extended") 'ls_extended]
         [(find-executable-path "exa") 'exa]
-        [else "ls --color=auto"])
-      "ls --color=auto"))
+        [else '(ls --color=auto)])
+      '(ls --color=auto)))
 
 
 ; ls aliases
-alias ls = "$best-ls-command" ; the $ means look for a racket variable I believe
+alias ls = (best-ls-command)
 alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
