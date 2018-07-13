@@ -16,7 +16,7 @@
 
 
 (define best-ls-command
-  (if (string=? (sub-string (getenv "TERM") 0 5) "xterm")
+  (if (string=? (substring (getenv "TERM") 0 5) "xterm")
       (cond
         [(find-executable-path "ls_extended") 'ls_extended]
         [(find-executable-path "exa") 'exa]
