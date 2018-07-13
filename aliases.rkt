@@ -19,11 +19,11 @@
   (cond
     [(find-executable-path "ls_extended") 'ls_extended]
     [(find-executable-path "exa") 'exa]
-    [else 'ls]))
+    [else "ls --color=auto"]))
 
 
 ; ls aliases
-alias ls = "$best-ls-command"
+alias ls = "$best-ls-command" ; the $ means look for a racket variable I believe
 alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
