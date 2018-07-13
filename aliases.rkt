@@ -19,7 +19,7 @@
 ; ls aliases
 alias ls = (if (string=? (substring (getenv "TERM") 0 5)
               "xterm")
-           'ls_extended
+           'exa
            'ls)
 alias la = ls -a
 alias ll = ls -la
