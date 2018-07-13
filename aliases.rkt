@@ -12,15 +12,11 @@
 
 (define-line-macro alias
   (syntax-parser
-    [(_ name:id (~datum =) value:expr ...) #'(define-simple-pipeline-alias name value ...)]
-    [(_ name:id value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
+    [(_ name:id (~optional (~datum =)) value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
 
 
 ; ls aliases
-alias ls = (if (string=? (substring (getenv "TERM") 0 5)
-              "xterm")
-           'exa
-           'ls)
+alias ls = 'exa
 alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
