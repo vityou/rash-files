@@ -12,15 +12,18 @@
 
 (define-line-macro alias
   (syntax-parser
-    [(_ name:id (~datum =) value:expr ...) #'(define-simple-pipeline-alias name value ...)]
-    [(_ name:id value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
+    [(_ name:id (~optional (~datum =)) value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
+
+
+(define best-ls-command
+  (cond
+    [(find-executable-path "ls_extended") 'ls_extended]
+    [(find-executable-path "exa") 'exa]
+    [else "ls --color=auto"]))
 
 
 ; ls aliases
-alias ls = (if (string=? (substring (getenv "TERM") 0 5)
-              "xterm")
-           'ls_extended
-           'ls)
+alias ls = "$best-ls-command" ; the $ means look for a racket variable I believe
 alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
