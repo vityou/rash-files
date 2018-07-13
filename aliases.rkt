@@ -15,8 +15,15 @@
     [(_ name:id (~optional (~datum =)) value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
 
 
+(define best-ls-command
+  (cond
+    [(find-executable-path "ls_extended") 'ls_extended]
+    [(find-executable-path "exa") 'exa]
+    [else 'ls]))
+
+
 ; ls aliases
-alias ls = 'exa
+alias ls = "$best-ls-command"
 alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
