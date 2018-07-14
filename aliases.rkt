@@ -35,3 +35,15 @@ alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
 
+; git aliases copied from rash/demo/setup
+alias gc = "git" 'commit
+alias gs = "git" 'status
+alias gd = "git" 'diff
+alias greb = "git" 'rebase
+alias gru = "git" 'remote 'update
+alias gunadd = "git" 'reset 'HEAD
+alias gco = "git" 'checkout
+alias gcob = "git" 'checkout '-b
+alias gclone = "git" 'clone '--recursive
+alias gp = "git" 'push
+alias ga = "git" 'add
