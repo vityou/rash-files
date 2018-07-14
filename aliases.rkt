@@ -20,9 +20,8 @@
 ; depending on the ones available
 ; and the TERM environment variable
 (define (best-ls-command)
-  (define term-var (getenv "TERM"))
-  (define long-enough (and term-var (>= (string-length term-var) 5)))
-  (if (and long-enough
+  (define term-var (getenv "TERM")) ; returns `#f` if it doesn't exist for some reason
+  (if (and term-var
            (string-contains? term-var "xterm"))
       (cond
         [(find-executable-path "ls_extended") 'ls_extended]
