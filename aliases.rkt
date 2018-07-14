@@ -10,7 +10,6 @@
 ; alias x = y
 ; or:
 ; alias x y
-
 (define-line-macro alias
   (syntax-parser
     [(_ name:id (~optional (~datum =)) value:expr ...) #'(define-simple-pipeline-alias name value ...)]))
@@ -20,7 +19,7 @@
 ; depending on the ones available
 ; and the TERM environment variable
 (define (best-ls-command)
-  (define term-var (getenv "TERM")) ; returns `#f` if it doesn't exist for some reason
+  (define term-var (getenv "TERM"))
   (if (and term-var
            (string-contains? term-var "xterm"))
       (cond
@@ -35,5 +34,4 @@ alias ls = (best-ls-command)
 alias la = ls -a
 alias ll = ls -la
 alias l = ls -l
-
 

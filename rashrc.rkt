@@ -5,9 +5,8 @@
 (provide (all-defined-out))
 
 
-(reprovide (for-syntax racket/base syntax/parse))
-
-
 (reprovide "aliases.rkt" 
-           "line-macros.rkt")
+           "line-macros.rkt"
+           (for-syntax racket/base syntax/parse)
+           (only-in rash/demo/setup val))
 

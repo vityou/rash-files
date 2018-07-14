@@ -1,7 +1,7 @@
 #lang rash
 
 (require (for-syntax racket/base
-		     syntax/parse
+                     syntax/parse
                      linea/line-macro-prop))
 
 (provide (except-out (all-defined-out)
@@ -25,7 +25,7 @@
            [(_) #'(first-thing ...)]))]))
 
 
-; set export environment variables
+; set environment variables
 (define-line-macro export
   (syntax-parser
     [(_ i:id (~optional (~datum =)) value) #'(putenv (symbol->string 'i) value)]))
@@ -38,11 +38,14 @@
     [(_ to-run ...) #'(to-run ...)]))
 
 
+; cd macros
 slm ~ = cd
 slm .. = cd ..
 slm ../.. = cd ../..
 
+
 slm exit-repl = (begin (if (file-exists? "/mnt/c/Users/zlee3/.racket/.LOCKracket-prefs.rktd")
-                      (delete-file "/mnt/c/Users/zlee3/.racket/.LOCKracket-prefs.rktd")
-                      0) 
-                  (exit))
+                           (delete-file "/mnt/c/Users/zlee3/.racket/.LOCKracket-prefs.rktd")
+                           0) 
+                       (exit))
+
