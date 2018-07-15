@@ -2,7 +2,9 @@
 
 (require (for-syntax racket/base
                      syntax/parse
-                     linea/line-macro-prop))
+                     linea/line-macro-prop)
+         (rename-in k-infix [$ k-infix-macro])
+         syntax/parse)
 
 (provide (except-out (all-defined-out)
                      exit-repl)
@@ -36,6 +38,14 @@
 (define-line-macro rr
   (syntax-parser
     [(_ to-run ...) #'(to-run ...)]))
+
+
+; allows for infix math like `1 + 1` and `sqrt 5 + 2`
+; look at k-infix documentation for info
+; I'm planning on making a more generalized version of this but k-infix is pretty good
+(define-line-macro math
+  (syntax-parser
+    [(_ first ...) #'(k-infix-macro first ...)]))
 
 
 ; cd macros
