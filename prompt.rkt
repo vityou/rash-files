@@ -2,8 +2,12 @@
 
 (define (powerline-prompt #:last-return-value [last-ret #f]
                           #:last-return-index [last-ret-n 0])
-
-  (displayln (format "\033[48;5;31;38;5;231m ~a \033[0m\033[38;2;0;135;175m\uE0B0" (path->string (current-directory))))
+  (define path-to-print (if (getenv "HOME")
+                            (regexp-replace (string-append "^" (regexp-quote (getenv "HOME")))
+                                            (path->string (current-directory))
+                                            "~")
+                            (path->string (current-directory))))
+  (displayln (format "\033[48;5;31;38;5;231m ~a \033[0m\033[38;2;0;135;175m\uE0B0" path-to-print))
   (displayln "\033[36m\uE0A1")
   (displayln "\033[36m\uE0A2")
   (displayln "\033[36m\uE0A3")
