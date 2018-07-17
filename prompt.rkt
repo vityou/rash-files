@@ -1,5 +1,7 @@
 #lang rash
 
+(require rash/private/rashrc-git-stuff)
+
 (define (powerline-prompt #:last-return-value [last-ret #f]
                           #:last-return-index [last-ret-n 0])
   (define path-to-print (if (getenv "HOME")
@@ -7,6 +9,10 @@
                                             (path->string (current-directory))
                                             "~")
                             (path->string (current-directory))))
+  (define git-stuff (get-git-info))
+  (define git-stuff-to-print (if git-stuff
+                                 (hash-ref git-stuff 'branch)
+                                 #f))
   (displayln (format "\033[48;5;31;38;5;231m ~a \033[0m\033[38;2;0;135;175m\uE0B0" path-to-print))
   (displayln "\033[36m\uE0A1")
   (displayln "\033[36m\uE0A2")
