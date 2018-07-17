@@ -1,5 +1,13 @@
 #lang rash
 
+
+; 
+(define (create-colored-string to-color 
+                               #:fg [foreground 0]
+                               #:bg [background 0])
+  (define (create-color-command fg-or-bg)))
+
+
 (define (powerline-prompt #:last-return-value [last-ret #f]
                           #:last-return-index [last-ret-n 0])
 
