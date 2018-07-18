@@ -1,7 +1,9 @@
 #lang rash
 
-(require rash/private/rashrc-git-stuff
-         racket/list)
+(require racket/list)
+
+
+(provide create-colored-string)
 
 
 ; hash for 4 bit colors
@@ -40,6 +42,7 @@
                                #:italic? [italic? #f]
                                #:underlined? [underlined? #f]
                                #:reset-before? [reset-before? #t] ; reset all attributes before setting your own
+                               #:reset-after? [reset-after? #t]
                                #:other-commands [other-commands ""]) ; string with normal ansi escape commands
 
   ; if user inputs a string starting with, "#", convert it to an rgb list
@@ -85,11 +88,12 @@
                                       (second background)
                                       (third background))])
         ""))
-  (define-values (bold-str ital-str und-str resetbf-str)
+  (define-values (bold-str ital-str und-str resetbf-str resetaft-str)
     (values (if bold? "\033[1m" "")
             (if italic? "\033[3m" "")
             (if underlined? "\033[4m" "")
-            (if reset-before? "\033[0m" "")))
+            (if reset-before? "\033[0m" "")
+            (if reset-after? "\033[0m" "")))
 
   (string-append resetbf-str
                  foreground-command
@@ -99,6 +103,41 @@
                  und-str
                  other-commands
                  to-color
+                 resetaft-str))
+
+
+; body is a list of stings and 
+(struct styled-string (body style))
+
+
+(define (create-styled-struct #:fg [foreground #f]
+                              #:bg [background #f]
+                              #:bold? [bold? #f]
+                              #:italic? [italic? #f]
+                              #:underlined? [underlined? #f]
+                              #:reset-before? [reset-before? #f] ; #f because we want nested structs to inherit style
+                              #:other-commands [other-commands ""]
+                              . to-color)
+  (styled-string to-color (create-colored-string ""
+                                                 #:fg foreground ; is there a more efficient way to pass these to `create-colored-string`?
+                                                 #:bg background
+                                                 #:bold? bold?
+                                                 #:italic? italic?
+                                                 #:underlined? underlined?
+                                                 #:reset-before? reset-before?
+                                                 #:reset-after? #f ; because we're going to be appending the text to the style so we do want to reset it right before
+                                                 #:other-commands other-commands)))
+
+
+(define (styled-struct->string ss [outer-style "\033[0m"])
+  (define this-style (string-append outer-style (styled-string-style ss)))
+  (string-append
+                 (foldl (lambda (element result)
+                          (if (string? element)
+                              (string-append result (string-append this-style element))
+                              (string-append result (styled-struct->string element this-style))))
+                        ""
+                        (styled-string-body ss))
                  "\033[0m"))
 
 
@@ -110,3 +149,10 @@
                                     #:underlined? #t
                                     #:italic? #t)))
 
+
+(module+ main
+  (displayln (styled-struct->string (create-styled-struct "I'm green and hilighted blue"
+                                                          (create-styled-struct " im still green but higighted yellow and underlined " #:bg "yellow" #:underlined? #t)
+                                                          "I'm green and hilighted blue again"
+                                                          #:fg "green"
+                                                          #:bg "blue"))))
