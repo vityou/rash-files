@@ -41,6 +41,30 @@
                                #:underlined? [underlined? #f]
                                #:reset-before? [reset-before? #t] ; reset all attributes before setting your own
                                #:other-commands [other-commands ""]) ; string with normal ansi escape commands
+
+  ; if user inputs a string starting with, "#", convert it to an rgb list
+  (when (and (string? foreground) (regexp-match "^#" foreground))
+    (when (= 4 (string-length foreground)) ; change #rgb to #rrggbb
+      (set! foreground (let ([r (string-ref foreground 1)]
+                             [g (string-ref foreground 2)]
+                             [b (string-ref foreground 3)])
+                         (string-append "#" (string r r g g b b)))))
+    (set! foreground
+          (map string->number (list (string-append "#x" (substring foreground 1 3))
+                                    (string-append "#x" (substring foreground 3 5))
+                                    (string-append "#x" (substring foreground 5 7))))))
+
+  (when (and (string? background) (regexp-match "^#" background))
+    (when (= 4 (string-length background)) ; change #rgb to #rrggbb
+      (set! background (let ([r (string-ref background 1)]
+                             [g (string-ref background 2)]
+                             [b (string-ref background 3)])
+                         (string-append "#" (string r r g g b b)))))
+    (set! background
+          (map string->number (list (string-append "#x" (substring background 1 3))
+                                    (string-append "#x" (substring background 3 5))
+                                    (string-append "#x" (substring background 5 7))))))
+
   (define foreground-command
     (if foreground
         (cond
@@ -81,7 +105,7 @@
 (module+ main
   (displayln (create-colored-string "asdf123test hi there im a test string! bye!"
                                     #:fg '(1 161 82)
-                                    #:bg 62
+                                    #:bg "#0a5"
                                     #:bold? #t
                                     #:underlined? #t
                                     #:italic? #t)))
