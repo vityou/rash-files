@@ -1,9 +1,12 @@
 #lang rash
 
-(require racket/list)
+(require racket/list
+         racket/draw)
 
 
-(provide create-colored-string)
+(provide create-colored-string
+         create-styled-struct
+         styled-struct->string)
 
 
 ; hash for 4 bit colors
@@ -44,6 +47,17 @@
                                #:reset-before? [reset-before? #t] ; reset all attributes before setting your own
                                #:reset-after? [reset-after? #t]
                                #:other-commands [other-commands ""]) ; string with normal ansi escape commands
+
+  ; if user inputs a color% object, change it to a normal r g b list, ignoring opacity
+  (when (and (object? foreground) (is-a? foreground color%))
+    (set! foreground (list (send foreground red)
+                           (send foreground green)
+                           (send foreground blue))))
+
+  (when (and (object? background) (is-a? background color%))
+    (set! background (list (send background red)
+                           (send background green)
+                           (send background blue))))
 
   ; if user inputs a string starting with, "#", convert it to an rgb list
   (when (and (string? foreground) (regexp-match "^#" foreground))
