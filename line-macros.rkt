@@ -54,8 +54,8 @@ slm .. = cd ..
 slm ../.. = cd ../..
 
 
-slm exit-repl = (begin (if (file-exists? "/mnt/c/Users/zlee3/.racket/.LOCKracket-prefs.rktd")
-                           (delete-file "/mnt/c/Users/zlee3/.racket/.LOCKracket-prefs.rktd")
-                           0) 
+; this file prevents the repl from closing
+slm exit-repl = (begin (when (file-exists? (string-append (getenv "HOME") ".racket/.LOCKracket-prefs.rktd"))
+                             (delete-file (string-append (getenv "HOME") ".racket/.LOCKracket-prefs.rktd")))
                        (exit))
 
