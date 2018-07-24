@@ -49,7 +49,6 @@
 
 
 ; cd macros
-slm ~ = cd
 slm .. = cd ..
 slm ../.. = cd ../..
 
